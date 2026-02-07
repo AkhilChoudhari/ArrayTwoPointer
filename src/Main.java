@@ -339,7 +339,7 @@ class Main {
  Space Complexity: O(1)
 */
 
-class Main {
+/*class Main {
 
     public void merge(int[] nums1, int m, int[] nums2, int n) {
 
@@ -352,7 +352,7 @@ class Main {
         // Pointer to last position in nums1 (total capacity)
         int k = m + n - 1;
 
-        /*
+        *//*
          Why fill from back?
 
          If we fill from front:
@@ -361,9 +361,9 @@ class Main {
 
          Filling from back ensures:
          - We only overwrite empty positions.
-        */
+        *//*
 
-        /*
+        *//*
          We loop while nums2 still has elements.
 
          Why only check (j >= 0)?
@@ -371,10 +371,10 @@ class Main {
            they are already correctly placed.
          - But if nums2 elements remain,
            they MUST be copied.
-        */
+        *//*
         while (j >= 0) {
 
-            /*
+            *//*
              IMPORTANT:
              Always check (i >= 0) before accessing nums1[i].
 
@@ -384,7 +384,7 @@ class Main {
 
              Forgetting this condition can cause
              ArrayIndexOutOfBoundsException.
-            */
+            *//*
             if (i >= 0 && nums1[i] > nums2[j]) {
 
                 // nums1[i] is larger → place it at back
@@ -421,7 +421,240 @@ class Main {
         System.out.println(Arrays.toString(nums1B));
         System.out.println();
     }
+    /*
+ Problem:
+ Given an array containing only 0s, 1s, and 2s,
+ sort it in-place in one pass.
+
+ 0 → Red
+ 1 → White
+ 2 → Blue
+
+ Constraints:
+ - One pass
+ - O(1) extra space
+ - In-place
+
+ --------------------------------------------------------
+
+ Brute Force:
+ Count number of 0s, 1s, and 2s in first pass,
+ overwrite array in second pass.
+ Time: O(n)
+ Space: O(1)
+ But requires two passes.
+
+ --------------------------------------------------------
+
+ Optimal Approach: Dutch National Flag Algorithm
+
+ Maintain four regions:
+
+ [ 0 zone | 1 zone | unknown | 2 zone ]
+
+ Invariant at any time:
+
+ 0 .. low-1       → all 0s
+ low .. mid-1     → all 1s
+ mid .. high      → unprocessed elements
+ high+1 .. end    → all 2s
+
+ We shrink the "unknown" region until mid > high.
+
+ Time Complexity: O(n)
+ Space Complexity: O(1)
+*/
+
+class Solution {
+
+    /*
+        public void sortColors(int[] nums) {
+     /*
+        if 2 passes are allowed, we can keep:
+        int count0 = 0;
+        int count1 = 0;
+        int count2 = 0;
+
+        //if interviewer allows two passes
+        Single pass → count frequencies
+        Second pass → overwrite array
+
+        Time: O(n)
+        Space: O(1) (technically constant)
+
+        what if interveiwer asks to solve it in one pass, take 2nd solution
+     */
+
+    /* int count0 = 0;
+     int count1 = 0;
+     int count2 = 0;
+
+     for(int i=0; i<nums.length; i++){
+        if(nums[i] == 0){
+            count0++;
+        } else if(nums[i] == 1){
+            count1++;
+        } else {
+            count2++;
+        }
+     }
+
+     for(int i=0;i<nums.length; i++){
+        if(count0 > 0) {
+            nums[i] = 0;
+            count0--;
+
+        } else if(count1 > 0) {
+            nums[i] = 1;
+            count1--;
+
+        } else if(count2 > 0){
+            nums[i] = 2;
+            count2--;
+
+        }
+     }
+
+    } */
+
+
+/*    public void sortColors(int[] nums) {
+
+        // Edge case: null or trivial array
+        if (nums == null || nums.length <= 1) return;
+
+        int low = 0;                  // boundary for 0s
+        int mid = 0;                  // current element being examined
+        int high = nums.length - 1;   // boundary for 2s
+
+        *//*
+         Initially:
+         - No 0s confirmed
+         - No 2s confirmed
+         - Entire array is unknown region
+        *//*
+
+        while (mid <= high) {
+
+            *//*
+             Case 1: nums[mid] == 0
+
+             This element belongs to the 0-zone.
+             Swap it with element at low pointer.
+
+             After swap:
+             - Element at index low is guaranteed correct (0).
+             - The swapped value at mid must be 1
+               (because low..mid-1 is all 1s by invariant).
+
+             So we safely increment both low and mid.
+            *//*
+            if (nums[mid] == 0) {
+
+                swap(nums, low, mid);
+
+                low++;   // expand 0 zone
+                mid++;   // move to next unknown element
+            }
+
+            *//*
+             Case 2: nums[mid] == 1
+
+             1 belongs in the middle zone.
+             It is already in correct region.
+
+             Just move mid forward.
+            *//*
+            else if (nums[mid] == 1) {
+
+                mid++;
+            }
+
+            *//*
+             Case 3: nums[mid] == 2
+
+             This element belongs in the 2-zone.
+             Swap it with element at high pointer.
+
+             IMPORTANT:
+             We DO NOT increment mid here.
+
+             Why?
+             Because the element swapped from high
+             is unprocessed and must be examined next.
+            *//*
+            else { // nums[mid] == 2
+
+                swap(nums, mid, high);
+
+                high--;  // expand 2 zone
+
+                // mid not incremented here intentionally
+            }
+        }
+    }
+
+    // Helper method to swap two elements
+    private void swap(int[] nums, int i, int j) {
+
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }*/
+
+
+    /*
+ Problem:
+ Given people weights and boat weight limit,
+ return minimum number of boats needed.
+ Each boat can carry at most 2 people.
+
+brute force:
+        //brute force: to try all pairs.
+        //this is too slow and exponential complexity
+
+ optimal Approach:
+ 1. Sort the array.
+ 2. Use two pointers (lightest & heaviest).
+ 3. Try pairing them greedily.
+
+ Time Complexity: O(n log n) due to sorting
+ Space Complexity: O(1)
+*/
+
+    /*class Main {
+        public int numRescueBoats(int[] people, int limit) {
+            //brute force: to try all pairs.
+            //this is too slow and exponential complexity
+
+            //this is two pointer greedy problem
+            //2-ptr greedy almost always need sorting first to make elimination easy
+
+            //try with two pointer
+            //deceptively easy
+            //bc of sorting the time: o(nlogn), space: o(1)
+            Arrays.sort(people); //sort first
+
+            int left = 0; //lightest
+            int right = people.length - 1; //heaviest
+            int boats = 0;
+
+            while (left <= right){
+                if(people[left] + people[right] <= limit) {
+                    left++;
+                    right--;
+                    boats++;
+                } else {
+                    right--;
+                    boats++;
+                }
+            }
+            return boats;
+        }
+    }
+*/
 }
+
 
 
 
