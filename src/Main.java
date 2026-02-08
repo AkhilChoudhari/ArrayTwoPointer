@@ -607,7 +607,7 @@ class Solution {
  Problem:
  Given people weights and boat weight limit,
  return minimum number of boats needed.
- Each boat can carry at most 2 people.
+ ****Each boat can carry at most 2 people.****
 
 brute force:
         //brute force: to try all pairs.
