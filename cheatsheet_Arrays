@@ -1,0 +1,300 @@
+🧠 🔷 PATTERN 1: Two Pointer (Static Array)
+
+Used when:
+
+Array is sorted
+
+Need pair/triplet
+
+Need in-place modification
+
+Need elimination from both ends
+
+🔹 1A — Opposite Direction (Sorted Array)
+
+Used for:
+
+Two Sum II
+
+Container With Most Water
+
+Boats to Save People
+
+Count pairs ≤ target
+
+🔥 Template
+int left = 0;
+int right = nums.length - 1;
+
+while (left < right) {
+
+    int value = nums[left] + nums[right]; // or custom logic
+
+    if (condition satisfied) {
+        // record result
+        left++;
+        right--;
+    } else if (value < target) {
+        left++;   // need larger value
+    } else {
+        right--;  // need smaller value
+    }
+}
+
+
+🧠 Key Rule:
+Sorted array → move pointers based on comparison.
+
+🔹 1B — Same Direction (Compaction / Filtering)
+
+Used for:
+
+Remove Duplicates
+
+Remove Element
+
+Move Zeroes
+
+🔥 Template
+int write = 0;
+
+for (int read = 0; read < nums.length; read++) {
+
+    if (keep condition) {
+        nums[write] = nums[read];
+        write++;
+    }
+}
+
+
+🧠 Key Rule:
+Read scans everything.
+Write builds valid prefix.
+
+🔹 1C — Backward Merge
+
+Used for:
+
+Merge Sorted Array
+
+🔥 Template
+int i = m - 1;
+int j = n - 1;
+int k = m + n - 1;
+
+while (j >= 0) {
+
+    if (i >= 0 && nums1[i] > nums2[j]) {
+        nums1[k--] = nums1[i--];
+    } else {
+        nums1[k--] = nums2[j--];
+    }
+}
+
+
+🧠 Key Rule:
+Fill from back to avoid overwrite.
+
+🔹 1D — Dutch National Flag (3 Pointers)
+
+Used for:
+
+Sort Colors
+
+🔥 Template
+int low = 0, mid = 0;
+int high = nums.length - 1;
+
+while (mid <= high) {
+
+    if (nums[mid] == 0) {
+        swap(nums, low++, mid++);
+    } 
+    else if (nums[mid] == 1) {
+        mid++;
+    } 
+    else {
+        swap(nums, mid, high--);
+    }
+}
+
+
+🧠 Key Rule:
+Partition into 3 zones.
+
+🧠 🔷 PATTERN 2: Sliding Window (Fixed Size)
+
+Used for:
+
+Maximum Sum of size k
+
+LC 643
+
+🔥 Template
+int currSum = 0;
+
+// build first window
+for (int i = 0; i < k; i++) {
+    currSum += nums[i];
+}
+
+int result = currSum;
+
+// slide window
+for (int i = k; i < nums.length; i++) {
+
+    currSum += nums[i];        // add new
+    currSum -= nums[i - k];    // remove old
+
+    result = Math.max(result, currSum); // or min
+}
+
+
+🧠 Key Rule:
+Window size never changes.
+
+🧠 🔷 PATTERN 3: Sliding Window (Variable Size)
+
+Used for:
+
+Longest Substring Without Repeating
+
+Minimum Size Subarray Sum
+
+Character Replacement
+
+🔹 3A — Expand + Shrink When Invalid
+
+Used for:
+
+Longest Substring Without Repeating
+
+Character Replacement
+
+🔥 Template
+int left = 0;
+
+for (int right = 0; right < n; right++) {
+
+    // expand window
+    add current element
+
+    while (window is invalid) {
+        remove left element
+        left++;
+    }
+
+    update answer
+}
+
+
+🧠 Key Rule:
+Shrink when constraint breaks.
+
+🔹 3B — Expand + Shrink While Valid (Min Length)
+
+Used for:
+
+Minimum Size Subarray Sum
+
+🔥 Template
+int left = 0;
+
+for (int right = 0; right < n; right++) {
+
+    add nums[right];
+
+    while (window is valid) {
+        update minimum answer
+        remove nums[left];
+        left++;
+    }
+}
+
+
+🧠 Key Rule:
+Shrink aggressively once valid.
+
+🧠 🔷 PATTERN 4: Frequency-Based Sliding Window
+
+Used for:
+
+LC 424
+
+At Most K Distinct
+
+🔥 Template
+int[] freq = new int[26];
+int left = 0;
+int maxFreq = 0;
+
+for (int right = 0; right < s.length(); right++) {
+
+    freq[s.charAt(right) - 'A']++;
+    maxFreq = Math.max(maxFreq, freq[s.charAt(right) - 'A']);
+
+    while ((right - left + 1) - maxFreq > k) {
+        freq[s.charAt(left) - 'A']--;
+        left++;
+    }
+
+    update result
+}
+
+
+🧠 Key Rule:
+Window size − dominant frequency ≤ k
+
+🧠 🔷 PATTERN 5: Counting Subarrays (Important Variant)
+
+Used for:
+
+Count subarrays ≤ K
+
+🔥 Template
+int left = 0;
+int count = 0;
+int sum = 0;
+
+for (int right = 0; right < nums.length; right++) {
+
+    sum += nums[right];
+
+    while (sum > k) {
+        sum -= nums[left++];
+    }
+
+    // All subarrays ending at right are valid
+    count += right - left + 1;
+}
+
+
+🧠 Key Trick:
+When valid, add entire window length.
+
+🔥 Mental Pattern Summary
+Pattern	Trigger
+Opposite pointer	Sorted + pair
+Same direction	In-place modify
+Fixed window	Size exactly k
+Variable window	Contiguous + constraint
+Shrink when invalid	Longest type
+Shrink when valid	Minimum type
+Count variant	Counting subarrays
+💎 If You Master These Templates
+
+You can solve 95% of:
+
+Two pointer
+
+Sliding window
+
+Medium string/array problems
+
+Now I’ll ask something sharp 👀🔥
+
+If interviewer gives:
+
+Count number of subarrays with sum exactly K (positive numbers)
+
+Which pattern does that belong to?
